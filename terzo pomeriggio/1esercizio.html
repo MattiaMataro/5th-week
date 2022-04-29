@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lezione 23/02</title>
+    </head>
+    <body>
+        <script>
+            //class constructor
+            //stampare metodo, oggetto
+
+            class user {
+                constructor (name,surname, age) {
+                    this.name = name;
+                    this.surname = surname;
+                    this.age = age;
+                }
+                saluta () {
+                    return 'Ciao ' + this.name + ' ' + this.surname;
+                }
+            }
+            let newUser =new user ('Mattia', 'Mataro',21);
+            console.log (newUser.saluta(), newUser);
+                    </script>
+    </body>

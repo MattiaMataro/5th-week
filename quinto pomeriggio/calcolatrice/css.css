@@ -1,0 +1,66 @@
+button {
+    width: 100%;
+    height: 50px;
+    background-color: rgb(219, 216, 216);
+    font-size: large;
+    text-align: center;
+}
+p {
+    height: 20px;
+}
+
+.operator{
+    background-color: orange;
+}
+
+#input {
+    height: 50px;
+}
+#enter {
+    background-color: green;
+}
+#canc{
+    background-color: red;
+}
+
+.operator:hover {
+    animation-name: changeOperator;
+    background-color: blue;
+    animation-duration: 0.5s;
+}
+
+.number:hover {
+    animation-name: changeNumber;
+    background-color: blue;
+    animation-duration: 0.5s;
+}
+#enter:hover {
+    animation-name: changeEnter;
+    background-color: green;
+    animation-duration: 0.5s;
+}
+#canc:hover {
+    animation-name: changeCanc;
+    background-color: red;
+    animation-duration: 0.5s;
+}
+
+@keyframes changeEnter {
+    from {background-color: green ;}
+    to {background-color: blue;}
+}
+
+@keyframes changeCanc {
+    from {background-color: red ;}
+    to {background-color: blue;}
+}
+
+@keyframes changeNumber {
+    from {background-color: rgb(219, 216, 216) ;}
+    to {background-color: blue;}
+}
+
+@keyframes changeOperator {
+    from {background-color: orange ;}
+    to {background-color: blue;}
+}

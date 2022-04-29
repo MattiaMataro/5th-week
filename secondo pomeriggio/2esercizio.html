@@ -1,0 +1,109 @@
+<!-- 1. oggetto name & accessID
+2. oggetto esteso con prototype (in caso di login con user Admin) -> userType
+3. gestisco + eventi a) click b) onmouseover
+4. function a) user 123 b) admin 123 c) qualsiasi altro
+5. eventHandler {click & onmouseover}
+
+username: user      password: 123
+username: admin     
+
+paragraph con "usr o psw errate"/"Benvenuto"
+
+h1 con "Admin"
+
+mousehover solo su username -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--bootstrap-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+        <title>Lezione</title>
+    </head>
+    <body>
+        <input type="text" id="usr">
+        <input type="password" id="pwd">
+        <button id="entra_btn">Entra</button>
+        <div id="target1"></div>
+        <div id="target2"></div>
+        
+            <script>
+                function User() {           //funzione di oggetto con il quale inserisco due attributi
+                    this.name = '';
+                    this.accessID = -1;
+                }
+                User.prototype.userType = {} || null;    //eestensione di un ulteriore attributo per la funzione user
+            
+                function Admin() {                      //
+                    this.id = 'ADMIN';
+                    this.access = 'unlimited';
+                }
+            
+                var EventHandler = {           //associare alla funzione eventHandler le azioni che verranno compiute ad un oggetto
+                    CLICK: 'click',
+                    MOUSE_OVER: 'mouseover',
+                    MOUSE_OUT: 'mouseout'
+            
+                }
+                var user = new User();
+                var entra_btn = document.querySelector("#entra_btn");       //chiamata di tutti i tag html
+                var usr = document.querySelector("#usr");
+                var pwd = document.querySelector("#pwd");
+                var target1 = document.querySelector("#target1"); 
+                var target2 = document.querySelector("#target2"); 
+            
+                entra_btn.addEventListener(EventHandler.CLICK, logIn); // al click sul buttone chiama la funzione login
+                usr.addEventListener(EventHandler.MOUSE_OVER, onMouseOver); // al click sul buttone chiama la funzione onmousehover
+            
+            
+                function logIn(e) {
+                    if (usr.value == 'user' && pwd.value == '123') {
+                        user.accessID = 0;
+                        user.userType = null; // se è user setta la proprietà userType a null
+                    }
+                    else if (usr.value == 'admin' && pwd.value == '123') { //ho cambiato con l'else if
+                        user.accessID = 1;
+                        user.userType = new Admin(); // se è admin setta la proprietà userType con il nuovo oggetto new Admin
+                    }
+                    else{ // terzo caso nell'else se è sbagliato
+                        user.accessID = -1;
+                        user.userType = null; // se è user setta la proprietà userType a null
+                    }
+                    user.name = usr.value;
+                    console.log(user); 
+                    if(user.accessID > -1){
+                        target1.innerHTML = 'Benvenuto ' + user.name;
+                        target2.innerHTML = '';
+                    }
+                    else{ 
+                        target1.innerHTML = 'User o pwd errate';
+                        target2.innerHTML = '';
+                    }
+            
+                    if(user && user.userType) {
+                        if (user.userType.id == 'ADMIN') {
+                            console.log(user.userType.id);
+                            target2.innerHTML = '<h2>Ruolo Admin</h2>';
+                        }
+                        else{ //aggiunto else per svuotare
+                            target2.innerHTML = '';
+                        }
+                    }
+            
+                }
+            
+                function onMouseOver(e) {
+                    e.target.title = "Inserisci il valore corretto";
+                }
+            
+            </script>
+        
+        
+    </body>

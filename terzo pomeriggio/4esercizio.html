@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lezione 23/02</title>
+    </head>
+    <body>
+        
+        <script>
+            class animale {
+                constructor (name){
+                    this.name = name;
+                }
+                mattina () {
+                    return this.name + ' si sveglia!';
+                }
+
+                pomeriggio () {
+                    return this.name + ' sta mangiando!';
+                }
+                sera () {
+                    return this.name + ' va a dormire!';
+                }                
+            }
+
+            class azioni extends animale{
+                constructor (name){
+                    super (name);
+                }
+                descrizione () {
+                    return this.name + ' è una bestia di 160 kg e sta gridando!';
+                }
+                primoConcatenamento () {
+                    return this.pomeriggio() + ' ' + this.descrizione();
+                }
+                routine () {
+                    return this.mattina () + ' ' + this.descrizione() + ' ' + this.pomeriggio() + ' ' + this.sera();
+                }
+            }
+
+            var George = new azioni ('George');
+            console.log (George.mattina ());
+            console.log (George.pomeriggio ());
+            console.log (George.sera ());
+            console.log (George.descrizione ());
+            console.log (George.primoConcatenamento ());
+            console.log (George.routine ());
+
+            
+        </script>
+    </body>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lezione 23/02</title>
+    </head>
+    <body>
+       <div id="demo"></div>
+
+        <script>
+            var p = document.getElementById('demo');
+            class Oggetto {
+                constructor (brand){
+                    this.brand = brand;
+                }
+                aggiungi () {
+                    return 'I have a ' + this.brand;
+                }
+            }
+
+            class Modello extends Oggetto {
+                constructor (brand, mod) {
+                    super (brand);
+                    this.model = mod;   
+                }
+                show (){
+                    return this.aggiungi() + ', modello: ' + this.model;
+                }
+            }
+
+            var myCar = new Modello ('Jeep', 'Renegade');
+            console.log (myCar.show());
+            p.innerHTML = myCar.show(); 
+
+            
+
+        </script>
+    </body>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lezione 23/02</title>
+    </head>
+    <body>
+        
+        <script>
+            class Persona {
+                constructor (name,surname,age) {
+                    this.name = name;
+                    this.surname = surname;
+                    this.age = age;
+                }
+                printPersona () {
+                    return this.name + this.surname + this.age;
+                }
+            }
+            class Student extends Persona {
+                constructor(name, surname, age, courses){
+                    super (name,surname,age);
+                    this.course = [...courses];
+                }
+                printStudent () {
+                    return this.name + this.surname + this.age + this.course;
+                }
+            }
+            class Teacher extends Persona {
+                constructor (name,surname,age,skills){
+                    super (name,surname,age);
+                    this.skills = [...skills];
+                }
+                printStudent () {
+                    return this.name + this.surname + this.age + this.skills;
+                }
+            }
+
+            var persona1 = new Persona ('Mario','Rossi', 25, ['css','Html', 'JS']);
+            var persona2 = new Student ('Luca','Verdi', 22 ['css', 'Python']);
+            var persona3 = new Teacher ('Francesco','Bianchi', 45 ['css','Html', 'JS', 'Python']);
+
+            console.log (persona1);
+            console.log (persona2);
+            console.log (persona3);
+        </script>
+    </body>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--bootstrap-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+        <title>Lezione 23/02</title>
+    </head>
+    <body>
+
+        <!-- I moduli servono a dividere la nostra applicazione in diversi file (modules)
+        esigenza che nasce dal fatto che  la nostra applicazione può crescere ( anche molto) di dimensione
+        dentro un modulo ?  una classe o ad esempio una libreria funzioni
+        soluzione vecchia?  librerie che gestivano il caricamento di moduli es. AMD(require.js), CommonJS(Node.js) e UMD
+        che cos'è un modulo? un file, uno script.
+        i moduli possono essere caricati a vicenda tramite speciali direttive: export e import.
+        -> scambiarsi funzionalità o anche chiamare funzioni da un modulo a un altro
+        export -> contrassegna variabili/funzioni che devono essere accessibili  dall'esterno del modulo
+        import -> permette di importare funzionalità da altri moduli
+         -->
+        <script>
+            //file sayHi.js
+            export function sayHi(user) {       //rendo utilizzabile la funzione all'esterno
+                alert (`Ciao ${user}!`);
+            }
+
+            //un altro file può importare la funzione
+            // file main.js
+            import {sayHi} from '/sayHi.js'     //importo la funzione dal file sayHi.js
+            alert (sayHi);
+            sayHi ('john');
+            //la direttiva import carica il modulo che trova nel percorso .../sayHi.js e assegna (37) la funzione alla variabile corrispondente
+            //percorso relativo al file corrente
+        </script>
+
+        <!--
+            esempio di importazione da file html
+            siccome i moduli usano keyword e funzionalità speciali
+            devo istruire il browser sul fatto che lo script deve essere trattato come un modulo
+        -->
+        <script type="module">
+            import{sayHi} from '.../sayHi.js';
+            document.body.innerHTML = sayHi('john');
+        </script>
+    <!--
+        i moduli lavorano solo via http(s), in locale le direttive import/export non funzionano
+        differenze tra i moduli e script "normali"
+        1. i moudli lavorano sempre in strict mode 'use strict'.
+        ---------------------------------------------------------------------
+        2. visibilità nei moduli
+            file index.html
+                <!doctype html>
+                <script type="module" src="user.js"></script>
+                <script type="module" src="hello.js"></script>
+            file user.js
+                let user = 'John'
+            file hello.js
+                alert (user);       ->la variabile non esiste( ogni modulo ha variabili indipendenti)
+                ? per farla funzionare? i moduli devono eseguire l'export di ciò che voglio sia accessibile dall'esterno
+                                        i moduli devono eseguire  l'export di ciò che hanno bisogno
+                                        user.js dovrebbe esportare la variabile user
+                                        hello.js dovrebbe importarla dal modulo user.js
+        ->versione corretta:
+        file index.html
+            <!doctype html>
+        <script type="module" src="hello.js"></script>
+             file user.js
+             export let user = 'John';
+        file hello.js
+           import {user} from user.js;
+           document.body.innerHTML = sayHi('john');
+------------------------------------------------------------------------------------------
+        3. due script type='module' non vedono le variabili uno dell'altro
+        file index.html
+            <script type="module">
+                //le variabili saranno visibili in questo modulo
+                let user = 'john';
+            </script>
+            <script type='module'>
+                //errore la variabile non è definita
+                alert(user);
+            </script>
+            -> soluzione -> posso creare una variabile globale assegnandola una proprietà window
+            ->           -> window.user ='John';    ->sarà accessibile a tutti gli scripts di tipo modulo o senza
+-------------------------------------------------------------------------------------------------------------
+        4. un modulo viene eseguito solo la prima volta che viene importato
+        file alert.js
+            alert('Il modulo è stato eseguito');
+        file 1.js
+            import ./alert.js       //il modulo è stato eseguito
+        file2.js
+            import ./alert.js       //errore
+        -->
+-------------------------------------------------------------------------------------------------------------------
+        <!-- -esportare più volte- -->
+
+        <body>
+            <script>
+                //file admin.js
+                export let admin = {
+                //    name: 'john';
+                }
+                // file1.js
+                import {admin} from './admin.js';
+                admin.name = 'peter';
+                //file2.js
+                import{admin} from './admin.js';
+                alert(admin.name); //Peter
+                //1.js e 2.js si riferiscono allo stesso oggetto, i cambiamenti fatti in 1.js sono visibili in 2.js
+
+                //schema
+                //1. un modulo esporta alcuni strumenti di configurazione (ad esempio un oggetto)
+                //2. alla prima importazione lo inizializziamo, impostando le sue proprietà
+                //3. ulteriori importazioni usano il modulo
+
+                //1.file admin.js
+                export let config = {}
+                export function sayHi() {
+                    alert (`Sono pronto, ${config.user}!`);
+                }
+                //2.file init.js
+                import {config} from './admin.js';
+                config.user = "Peter";              //ora il modulo è configurato
+                //3.file antoher.js
+                import {sayHi} from './admin.js'
+                sayHi();                            // stamperà --> Sono pronto Peter
+/*  ----------------------------------------------------------------------------------------------------------------------
+                5. all'interno di un modulo this non esiste
+                <script>
+                alert(this) --> errore
+
+                //il download di un modulo esterno <script type="module" src="..." -> non blocca l'elaborazione dell'html, caricati in parallelo
+                //i moudli attendono fino al momento in cui l'html è pronto
+                //l'ordine degli script viene mantenuto -> gli script che appaiono per prima vengono eseguiti per prima
+                //i moduli'vedono' sempre la pagina html complpetamente caricata, inclusi gli elementi che stanno sotto di essi
+*/
+    </script>
+    <script>
+        alert(typeof button);   // error button is undefined // viene eseguito per primo
+        </script>
+        <button id="button"></button>
+        <script async type="module">
+            import {counter} from './analystic.js'; //con async non aspetta che  il doc sia pronto
+    </script>
+    <script type="module" src="myfile.js"></script>         <!-- file interno -->
+    <script type="module" src="https://www.altrosito.it/loro.js"></script>  <!-- file esterno-->
+    <!--non è possibile accettare senza percorso 'bare'-->
+    <script type="module">
+        import {sayHi} from 'sayHi';    //errore modulo "bare"
+        //il modulo deve sempre avere un percorso
+    </script>
+    <!-- EXPORT E IMPORT -->
+    <script type="module">
+        export let months = ['Jan', 'Feb', 'Mar']   //esporto array
+        export const StandardYear = 2022;           //esporto costante
+        export class user {                         //esporto classe
+            constructor(name) {
+                this.name = name;
+            }
+        }
+
+        //possiamo inserire export separatamente
+        //file say.js
+        function sayHi(user) {
+            alert(`Hello, ${user} `);
+        }
+        function sayBye(user) {
+            alert(`Bye, ${user} `);
+        }
+        export {sayHi,sayBye};      //una lista di funzioni esportate
+
+        //import
+        //main.js
+        import {sayHi,sayBye} from './say,js';      //importo piu funzioni
+        //main.js
+        import * as say from './say,js';        //importa tutto quello che trova in say.js definito come oggetto
+        sayHi('john');      //Hi john
+        sayBye('peter');    //bye peter
+        //perchè limitare l'uso di *
+        //1. velocizzare il caricamento e non uare cose inutile (importare solo quello che serve)
+        //2. se elenchiamo solo che ci serve avremo nomi più brevi: sayHi() anzichè say.sayHi()
+        //3. migliore visione della struttura del codice
+
+        //-----------------------------
+        // import as --> per importare con nomi differenti
+        //main.js
+        import {sayHi as hi, sayBye as bye} from './say,js';
+        hi('john');
+        bye('john');
+        //say,js
+        export {sayHi as hi, sayBye as bye};
+
+        //due tipi di moduli
+        //1. moduli che contengono una libreria: pacchetti di funzioni (say.js)
+        //2. moduli che dichiarano una singola entità (user.js che esportava solo la classe user)
+        //export default    -> esporta una cosa per modulo
+        //file user.js
+        export default class user{      //export default puo essere inserito solo una volta per file
+            constructor(name)
+            {this.name  = name;}
+        }
+        //file main.js
+        import user from './user.js';   //importo senza graffe
+        new user('john');
+
+        //default
+        function sayHi(user) {
+            alert (`Hello, ${user}`);
+        }
+        //equivalente a export default
+        export {sayHi as default};
+        //se usiamo *
+        //main.js
+        import * as user from './user,js';
+        let user = user.default;    //il default di export
+        new user ('John');
+    </script>
+    <!--
+        export [default] class/function/variabile
+        export indipendente -> {x [as y]}
+        import {x [as y]} from percorso_modulo
+        import x from percorso_modulo
+        import (default as x) from percorso_modulo
+        importare tutto -> import * as obj from percorso_modulo
+    -->
+
+
+
+
+</body>

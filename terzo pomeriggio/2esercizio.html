@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lezione 23/02</title>
+    </head>
+<body>
+    <input type="text" id="nameAdd">
+    <button id="btn">Aggiungi</button>
+    <ul id="lista">
+    </ul>
+    <script>
+        class persona{
+            constructor(name){
+                this.name = name;
+            }
+        };
+        let Persone = [];
+        let btn= document.querySelector('#btn');
+        let nameAdd= document.querySelector('#nameAdd');
+        let lista = document.querySelector("#lista");
+        let lista1;
+        btn.addEventListener("click", aggiungi);
+
+
+        function aggiungi(){
+            let utente = new persona(nameAdd.value);
+           Persone.push(utente);
+           console.log(Persone);
+           lista1='';
+           Persone.forEach(element => {
+               lista1  = lista1+ '<li>'+ element.name +'</li>';
+               lista.innerHTML=lista1;
+           });
+        }
+    </script>
+</body>
